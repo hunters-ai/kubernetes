@@ -23,6 +23,7 @@ def main():
     data["name"] = os.environ.get('RD_CONFIG_NAME')
     data["type"] = os.environ.get('RD_CONFIG_TYPE')
     data["namespace"] = os.environ.get('RD_CONFIG_NAMESPACE')
+    data["label_selector"] = os.environ.get('RD_CONFIG_LABEL_SELECTOR')
 
     common.connect()
 
@@ -119,6 +120,31 @@ def main():
                 name=data["name"],
                 body=client.V1DeleteOptions(),
                 pretty="true")
+
+        if data["type"] == "FlinkApplication":
+            api_instance = client.CustomObjectsApi()
+            flinkapps = api_instance.delete_namespaced_custom_object(
+                group="flinkoperator.k8s.io",
+                version="v1beta1",
+                namespace="detectors",
+                plural="flinkapplications",
+                label_selector=data["label_selector"]
+            )
+
+            if not flinkapps.get("items"):
+                raise ValueError(f"No FlinkApplications found with the given label selector: {data["label_selector"]}")
+
+            for item in flinkapps['items']:
+                flink_app_name = item["metadata"]["name"]
+                resp = api_instance.delete_namespaced_custom_object(
+                    group=group,
+                    version=version,
+                    namespace=namespace,
+                    plural=plural,
+                    name=flink_app_name,
+                    body=client.V1DeleteOptions()  # Optional delete options
+                )
+                print(f"Deleted FlinkApplication: {flink_app_name}")
 
         print(common.parseJson(resp))
 

@@ -1151,10 +1151,10 @@ providers:
       - name: name
         type: String
         title: "Name"
-        description: "Name of the kubernetes resource "
+        description: "Name of the kubernetes resource"
         required: true
       - name: label_selector
-        type: string
+        type: String
         title: "Label Selector"
         description: "Comma separated list of label selectors i.e key=value,key2=value2"
         required: false

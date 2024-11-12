@@ -1153,6 +1153,11 @@ providers:
         title: "Name"
         description: "Name of the kubernetes resource "
         required: true
+      - name: label_selector
+        type: string
+        title: "Label Selector"
+        description: "Comma separated list of label selectors i.e key=value,key2=value2"
+        required: false
       - name: namespace
         type: String
         title: "Namespace"
@@ -1164,7 +1169,7 @@ providers:
         title: "Type"
         description: "Type"
         required: true
-        values: Deployment,StatefulSet,ConfigMap,Service,Ingress,Job,StorageClass,PersistentVolume,PersistentVolumeClaim,Secret
+        values: Deployment,StatefulSet,ConfigMap,Service,Ingress,Job,StorageClass,PersistentVolume,PersistentVolumeClaim,Secret,FlinkApplication
       - name: config_file
         type: String
         title: "Kubernetes Config File Path"
